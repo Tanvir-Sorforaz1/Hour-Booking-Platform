@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hour Booking</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --panel:#151922;
+    --panel2:#1b202b;
+    --line:#252b38;
+    --text:#e8ecf4;
+    --muted:#8b95a8;
+    --accent:#4f8cff;
+    --free:#1e2430;
+    --free-hover:#2c3444;
+    --sel1:#37d67a;
+    --sel2:#22a95c;
+    --booked1:#ff7a7a;
+    --booked2:#dc3f3f;
+
+    --prev1:#ff8a4c;
+    --prev2:#ff4d6d;
+    --next1:#4facfe;
+    --next2:#7c5cff;
+
+    /* flat colors */
+    --bar-high:#22c55e;   /* green  */
+    --bar-mid:#a16207;    /* brown  */
+    --bar-low:#dc2626;    /* red    */
+    --rem-red:#ff4d4d;    /* red for value text */
+  }
+
+  *{box-sizing:border-box}
+
+  body{
+    margin:0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1100px 520px at 50% -12%, #1c2436 0%, transparent 62%),
+      radial-gradient(800px 400px at 100% 0%, #241c3a 0%, transparent 55%),
+      var(--bg);
+    min-height:100vh;
+    padding:34px 16px 24px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:920px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+
+  /* ---------- header ---------- */
+  .head{
+    display:flex;flex-wrap:wrap;gap:16px;
+    align-items:flex-end;justify-content:space-between;
+    padding:2px 4px 6px;
+  }
+  .head h1{
+    margin:0 0 6px;
+    font-size:clamp(24px,4vw,32px);
+    letter-spacing:-.02em;
+    background:linear-gradient(92deg,#fff,#a9c2ff 55%,#b79cff);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5;max-width:52ch}
+
+  /* ---------- date banner ---------- */
+  .date-banner{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    align-items:stretch;
+    padding:14px 16px;
+    border-radius:16px;
+    background:linear-gradient(180deg, rgba(124,92,255,.14), rgba(79,140,255,.06)), var(--panel);
+    border:1px solid rgba(124,92,255,.45);
+    box-shadow:
+      0 0 0 1px rgba(124,92,255,.15),
+      0 18px 40px -22px rgba(124,92,255,.7),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    min-width:300px;
+  }
+
+  .date-banner .tag{
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:#c7b6ff;font-weight:800;
+    display:flex;align-items:center;gap:6px;
+  }
+  .date-banner .tag::before{
+    content:"";
+    width:7px;height:7px;border-radius:50%;
+    background:var(--next1);
+  }
+
+  .date-row{
+    display:grid;
+    grid-template-columns:52px 1fr 52px;
+    gap:8px;
+    align-items:center;
+  }
+
+  .nav-btn{
+    border:none;
+    color:#fff;
+    border-radius:12px;
+    width:52px;height:52px;
+    padding:0;
+    font-size:22px;
+    font-weight:800;
+    line-height:1;
+    display:grid;place-items:center;
+    cursor:pointer;
+    transition:transform .12s ease, filter .15s ease;
+    user-select:none;
+    font-family:inherit;
+  }
+  .nav-btn.prev{background:var(--prev2)}
+  .nav-btn.next{background:var(--next2)}
+  .nav-btn:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-1px)}
+  .nav-btn:active:not(:disabled){transform:translateY(1px) scale(.98)}
+  .nav-btn:disabled{
+    background:#232a38;color:#5e6a80;cursor:not-allowed;opacity:.6;
+  }
+
+  .date-input-wrap{position:relative}
+  .date-input-wrap input[type=date]{
+    width:100%;
+    background:rgba(0,0,0,.32);
+    border:1px solid rgba(124,92,255,.45);
+    color:#fff;
+    border-radius:12px;
+    padding:0 12px;
+    height:52px;
+    font-size:15px;
+    font-weight:600;
+    font-family:inherit;
+    outline:none;
+    color-scheme:dark;
+    cursor:pointer;
+    text-align:center;
+    letter-spacing:.02em;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .date-input-wrap input[type=date]:hover{
+    background:rgba(0,0,0,.45);
+    border-color:rgba(124,92,255,.7);
+  }
+  .date-input-wrap input[type=date]:focus{
+    border-color:#7c5cff;
+    box-shadow:0 0 0 4px rgba(124,92,255,.25);
+  }
+
+  .date-big{
+    text-align:center;
+    font-size:15.5px;
+    font-weight:750;
+    letter-spacing:.01em;
+    color:#e5ecff;
+    padding:2px 0 0;
+  }
+  .date-sub{
+    text-align:center;
+    font-size:11.5px;
+    color:#a8b3c7;
+    margin-top:-4px;
+    font-weight:500;
+    min-height:18px;
+  }
+  .date-sub .today-chip{
+    display:inline-block;
+    padding:2px 9px;
+    border-radius:999px;
+    background:var(--sel2);
+    color:#07230f;
+    font-weight:800;
+    font-size:10.5px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
+
+  /* ---------- panels ---------- */
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px;
+    box-shadow:0 20px 44px -30px #000;
+  }
+  .panel-head{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:12px;flex-wrap:wrap;margin-bottom:12px;
+  }
+  .panel-head h2{margin:0;font-size:14px;letter-spacing:.02em;font-weight:650}
+  .total{font-size:12px;color:var(--muted)}
+
+  /* ========================================================
+     REMAINING HOURS — same bg as page (no colored block)
+     White labels, red value, colored progress bar
+     ======================================================== */
+  .remaining-panel{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding:16px 18px;
+    border-radius:18px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    box-shadow:0 20px 44px -30px #000;
+  }
+
+  .remaining-icon{
+    flex:none;
+    width:52px;height:52px;
+    border-radius:14px;
+    display:grid;place-items:center;
+    background:var(--panel2);
+    border:1px solid var(--line);
+    font-size:22px;
+    color:#e8ecf4;
+  }
+
+  .remaining-info{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    flex:1;
+    min-width:0;
+  }
+  .remaining-label{
+    font-size:10.5px;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:800;
+    color:#ffffff;
+  }
+
+  .remaining-value{
+    font-size:clamp(24px, 4.6vw, 34px);
+    font-weight:850;
+    letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;
+    line-height:1.05;
+    color:var(--rem-red);
+  }
+  .remaining-sub{
+    font-size:12px;
+    color:#ffffff;
+    font-weight:500;
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* progress bar */
+  .remaining-bar{
+    flex:none;
+    width:120px;
+    height:8px;
+    border-radius:999px;
+    background:rgba(255,255,255,.1);
+    overflow:hidden;
+  }
+  .remaining-bar-fill{
+    height:100%;
+    width:100%;
+    border-radius:999px;
+    background:var(--bar-high);
+    transition:width .35s cubic-bezier(.2,.9,.25,1), background .2s ease;
+  }
+
+  /* bar color states */
+  .remaining-panel.bar-high .remaining-bar-fill{background:var(--bar-high)}
+  .remaining-panel.bar-mid  .remaining-bar-fill{background:var(--bar-mid)}
+  .remaining-panel.bar-low  .remaining-bar-fill{background:var(--bar-low)}
+
+  /* ---------- bookings summary panel ---------- */
+  .bookings-panel{
+    background:var(--panel);
+    border:1px solid rgba(55,214,122,.28);
+    box-shadow:0 20px 44px -30px #000;
+  }
+  .bookings-panel .panel-head h2{
+    display:flex;align-items:center;gap:8px;
+  }
+  .bookings-panel .panel-head h2::before{
+    content:"";
+    width:8px;height:8px;border-radius:2px;
+    background:var(--sel1);
+  }
+
+  .list{display:flex;flex-direction:column;gap:9px}
+  .empty{margin:4px 2px;color:var(--muted);font-size:13px}
+
+  .booking{
+    display:flex;align-items:center;gap:14px;
+    background:var(--panel2);
+    border:1px solid rgba(55,214,122,.32);
+    border-left:3px solid var(--sel1);
+    border-radius:12px;
+    padding:11px 13px;
+  }
+
+  .b-time{
+    font-variant-numeric:tabular-nums;
+    font-weight:650;font-size:13.5px;
+    display:flex;align-items:center;gap:7px;
+    white-space:nowrap;
+  }
+  .b-time span{color:#8fdcb0;font-weight:400}
+  .b-meta{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
+  .b-meta strong{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .b-meta span{font-size:11.5px;color:#93a2b8}
+
+  .del{
+    background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--muted);
+    border-radius:9px;width:32px;height:32px;padding:0;font-size:13px;line-height:1;
+    display:grid;place-items:center;flex:none;
+  }
+  .del:hover{color:#ffd0d0;border-color:rgba(255,107,107,.5);background:rgba(255,107,107,.12)}
+
+  /* ---------- timeline ---------- */
+  .legend{display:flex;gap:14px;font-size:11.5px;color:var(--muted);flex-wrap:wrap}
+  .legend span{display:inline-flex;align-items:center;gap:6px}
+  .sw{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .sw.free{background:var(--free);border:1px solid #2e3646}
+  .sw.sel{background:var(--sel1)}
+  .sw.booked{background:var(--booked2)}
+
+  .timeline{
+    background:rgba(0,0,0,.22);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:8px 10px 8px 6px;
+    overflow:visible;
+  }
+
+  .hour-row{
+    display:grid;
+    grid-template-columns:78px 1fr;
+    align-items:stretch;
+    height:30px;
+  }
+  .hour-row + .hour-row{border-top:1px solid rgba(255,255,255,.035)}
+
+  .hour-label{
+    display:flex;align-items:center;justify-content:flex-end;
+    padding-right:10px;
+    font-size:10.5px;color:#69738a;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:.03em;
+    white-space:nowrap;
+  }
+
+  .slots{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:2px;
+    padding:3px 0;
+  }
+
+  .cell{
+    background:var(--free);
+    border-radius:4px;
+    cursor:pointer;
+    transition:background .13s ease;
+    position:relative;
+  }
+  .cell:hover{background:var(--free-hover)}
+  .cell.half{margin-left:5px}
+  .cell.selected{
+    background:var(--sel1);
+    box-shadow:0 0 0 1px rgba(55,214,122,.45);
+  }
+  .cell.booked{
+    background:var(--booked2);
+    cursor:not-allowed;
+    box-shadow:0 0 0 1px rgba(255,107,107,.3);
+  }
+  .cell.booked:hover{background:var(--booked2)}
+
+  .cell.past{
+    background:repeating-linear-gradient(45deg,#171b23,#171b23 4px,#1c212b 4px,#1c212b 8px);
+    cursor:not-allowed;
+    opacity:.55;
+  }
+  .cell.past:hover{background:repeating-linear-gradient(45deg,#171b23,#171b23 4px,#1c212b 4px,#1c212b 8px)}
+
+  /* spacer */
+  .sticky-spacer{
+    height:0;
+    transition:height .32s cubic-bezier(.2,.9,.25,1);
+    pointer-events:none;
+  }
+  body.has-selection .sticky-spacer{height:150px}
+
+  /* ---------- STICKY ACTION BAR ---------- */
+  .sticky-bar{
+    position:fixed;
+    left:50%;
+    bottom:0;
+    transform:translate(-50%, 120%);
+    width:100%;
+    max-width:920px;
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
+    z-index:50;
+    background:rgba(11,13,18,.98);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border-top:1px solid rgba(55,214,122,.35);
+    border-left:1px solid var(--line);
+    border-right:1px solid var(--line);
+    border-radius:18px 18px 0 0;
+    box-shadow:0 -18px 40px -22px rgba(0,0,0,.95);
+    transition:transform .32s cubic-bezier(.2,.9,.25,1), opacity .25s ease;
+    opacity:0;
+    pointer-events:none;
+  }
+  .sticky-bar.visible{
+    transform:translate(-50%, 0);
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .sticky-inner{
+    display:flex;
+    align-items:flex-end;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .sticky-fields{
+    display:flex;
+    gap:10px;
+    flex:1 1 auto;
+    min-width:0;
+    flex-wrap:wrap;
+  }
+
+  .sfield{display:flex;flex-direction:column;gap:5px;min-width:104px}
+  .sfield.grow{flex:1 1 160px}
+  .sfield > span{
+    font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#8f9bb3;font-weight:800;
+  }
+  .sfield select,
+  .sfield input[type=text]{
+    width:100%;
+    background:var(--panel2);
+    border:1px solid rgba(55,214,122,.28);
+    color:var(--text);
+    border-radius:10px;
+    padding:9px 11px;
+    font-size:13.5px;
+    font-family:inherit;
+    font-variant-numeric:tabular-nums;
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .sfield select{
+    appearance:none;cursor:pointer;
+    background-image:linear-gradient(45deg,transparent 50%,#7f8aa3 50%),linear-gradient(135deg,#7f8aa3 50%,transparent 50%);
+    background-position:calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+    background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+    padding-right:32px;
+  }
+  .sfield select:focus,
+  .sfield input:focus{
+    border-color:rgba(55,214,122,.75);
+    box-shadow:0 0 0 3px rgba(55,214,122,.18);
+  }
+  .sfield input::placeholder{color:#5f6a7e}
+
+  .sfield input.invalid{
+    border-color:#ff5a5a;
+    box-shadow:0 0 0 3px rgba(255,90,90,.2);
+  }
+
+  .sfield-error{
+    display:block;
+    margin-top:4px;
+    font-size:11.5px;
+    color:#ff7a7a;
+    font-weight:600;
+    line-height:1.3;
+  }
+
+  .sticky-actions{
+    display:flex;
+    gap:10px;
+    flex:0 0 auto;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    font-family:inherit;font-size:13.5px;font-weight:700;
+    border-radius:11px;padding:12px 18px;cursor:pointer;
+    border:1px solid transparent;
+    transition:transform .12s ease, filter .15s ease, background .15s, border-color .15s;
+    color:#fff;
+    white-space:nowrap;
+  }
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{
+    background:var(--sel2);
+    color:#fff;
+  }
+  .btn-primary:hover{filter:brightness(1.1)}
+  .btn-ghost{
+    background:transparent;border-color:rgba(255,255,255,.12);color:var(--muted);
+  }
+  .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
+
+  .sticky-readout{
+    display:flex;align-items:center;gap:10px;
+    padding:9px 15px;
+    background:rgba(255,77,77,.1);
+    border:1px solid rgba(255,77,77,.45);
+    border-radius:11px;
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+    min-height:42px;
+  }
+  .sticky-readout .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--rem-red);
+    flex:none;
+  }
+  .sticky-readout .dur-text{
+    font-size:17px;
+    font-weight:800;
+    color:var(--rem-red);
+  }
+  .sticky-readout.empty{
+    background:rgba(255,255,255,.03);
+    border-color:rgba(255,255,255,.08);
+  }
+  .sticky-readout.empty .dot{background:#5a6478}
+  .sticky-readout.empty .dur-text{
+    color:var(--muted);font-size:13px;font-weight:500;
+  }
+
+  .sticky-error{
+    margin-top:10px;
+    background:rgba(255,107,107,.12);
+    border:1px solid rgba(255,107,107,.4);
+    color:#ffc2c2;
+    border-radius:10px;
+    padding:9px 12px;
+    font-size:12.5px;
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width:560px){
+    body{padding:22px 12px 24px}
+
+    .hour-row{grid-template-columns:64px 1fr;height:28px}
+    .hour-label{font-size:9px;padding-right:6px;letter-spacing:0}
+    .cell.half{margin-left:3px}
+    .b-time{font-size:12px;gap:5px}
+
+    .date-banner{width:100%;min-width:0}
+    .date-row{grid-template-columns:46px 1fr 46px;gap:6px}
+    .nav-btn{width:46px;height:46px;font-size:20px}
+    .date-input-wrap input[type=date]{height:46px;font-size:13.5px;padding:0 8px}
+    .date-big{font-size:14px}
+
+    .remaining-panel{padding:13px 14px;gap:12px;flex-wrap:wrap}
+    .remaining-icon{width:44px;height:44px;border-radius:12px;font-size:19px}
+    .remaining-value{font-size:26px}
+    .remaining-bar{width:100%;order:3;height:7px}
+
+    .sticky-bar{padding:10px 12px calc(10px + env(safe-area-inset-bottom, 0px))}
+    .sticky-inner{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      align-items:end;
+    }
+    .sticky-fields{display:contents}
+    .sfield{min-width:0}
+    .sfield.grow{grid-column:1 / -1;flex:unset}
+
+    .sticky-actions{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:2px;
+    }
+    .sticky-readout{
+      grid-column:1 / -1;
+      justify-content:center;
+      padding:7px 10px;
+      min-height:0;
+    }
+    .sticky-readout .dur-text{font-size:16px}
+    .sticky-readout.empty .dur-text{font-size:12px}
+    .btn{padding:10px 12px;font-size:13px;width:100%}
+
+    body.has-selection .sticky-spacer{height:250px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="head">
+    <div>
+      <h1>Book your hours</h1>
+      <p class="sub">Pick any date from today onward and reserve any slice of its 24 hours with 10-minute precision.</p>
+    </div>
+
+    <div class="date-banner">
+      <span class="tag">Booking for</span>
+      <div class="date-row">
+        <button id="prevDay" class="nav-btn prev" title="Previous day" aria-label="Previous day">‹</button>
+        <div class="date-input-wrap">
+          <input id="datePicker" type="date" aria-label="Select date">
+        </div>
+        <button id="nextDay" class="nav-btn next" title="Next day" aria-label="Next day">›</button>
+      </div>
+      <div id="dateBig" class="date-big">—</div>
+      <div id="dateSub" class="date-sub">—</div>
+    </div>
+  </header>
+
+  <!-- ============ REMAINING HOURS ============ -->
+  <section id="remainingPanel" class="remaining-panel bar-high">
+    <div class="remaining-icon">⏳</div>
+    <div class="remaining-info">
+      <span class="remaining-label">Remaining today</span>
+      <span id="remainingValue" class="remaining-value">24h</span>
+      <span id="remainingSub" class="remaining-sub">of 24 hours free</span>
+    </div>
+    <div class="remaining-bar">
+      <div id="remainingBarFill" class="remaining-bar-fill" style="width:100%"></div>
+    </div>
+  </section>
+
+  <!-- ============ BOOKINGS ============ -->
+  <section class="panel bookings-panel">
+    <div class="panel-head">
+      <h2>Your bookings</h2>
+      <span id="total" class="total"></span>
+    </div>
+    <div id="list" class="list"></div>
+  </section>
+
+  <!-- ============ TIMELINE ============ -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2 id="timelineTitle">Timeline</h2>
+      <div class="legend">
+        <span><i class="sw free"></i>Free</span>
+        <span><i class="sw sel"></i>Selected</span>
+        <span><i class="sw booked"></i>Booked</span>
+      </div>
+    </div>
+    <div id="timeline" class="timeline"></div>
+
+    <div class="sticky-spacer" aria-hidden="true"></div>
+  </section>
+
+</div>
+
+<!-- ============ STICKY ACTION BAR ============ -->
+<div id="stickyBar" class="sticky-bar" role="region" aria-label="Booking actions">
+  <div class="sticky-inner">
+    <div class="sticky-fields">
+      <label class="sfield">
+        <span>Start</span>
+        <select id="startSel"></select>
+      </label>
+      <label class="sfield">
+        <span>End</span>
+        <select id="endSel"></select>
+      </label>
+      <label class="sfield grow">
+        <span>Label</span>
+        <input id="nameInput" type="text" placeholder="e.g. Deep work" maxlength="40">
+        <span id="nameError" class="sfield-error" hidden></span>
+      </label>
+    </div>
+
+    <div class="sticky-actions">
+      <div id="readout" class="sticky-readout empty">
+        <span class="dot"></span>
+        <span id="readoutText" class="dur-text">No time selected</span>
+      </div>
+      <button id="bookBtn" class="btn btn-primary">Book this slot</button>
+      <button id="clearBtn" class="btn btn-ghost">Clear</button>
+    </div>
+  </div>
+  <div id="error" class="sticky-error" hidden></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const SLOT     = 10;
+  const DAY      = 24 * 60;
+  const CELLS    = DAY / SLOT;
+  const SLOTS_HR = 60 / SLOT;
+
+  const $   = (id) => document.getElementById(id);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  /* ---------------- date helpers ---------------- */
+  function startOfToday() {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }
+  function isoLocal(d) {
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  function dateFromISO(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    return new Date(y, m - 1, d);
+  }
+  function addDays(iso, n) {
+    const d = dateFromISO(iso);
+    d.setDate(d.getDate() + n);
+    return isoLocal(d);
+  }
+
+  const TODAY     = startOfToday();
+  const TODAY_ISO = isoLocal(TODAY);
+
+  /* ---------------- formatting ---------------- */
+  function fmt(m) {
+    const total = (m === DAY) ? 0 : m;
+    let h = Math.floor(total / 60);
+    const min = total % 60;
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    if (h === 0) h = 12;
+    return h + ":" + pad(min) + " " + ampm;
+  }
+  function fmtHour(h24) {
+    const ampm = h24 >= 12 ? "PM" : "AM";
+    let h = h24 % 12;
+    if (h === 0) h = 12;
+    return h + " " + ampm;
+  }
+  function durText(mins) {
+    const h = Math.floor(mins / 60), m = mins % 60;
+    if (h && m) return h + "h " + m + "m";
+    if (h) return h + "h";
+    return m + "m";
+  }
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, (c) => (
+      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
+    ));
+  }
+  function prettyDate(d) {
+    return d.toLocaleDateString(undefined, {
+      weekday: "long", day: "numeric", month: "long", year: "numeric"
+    });
+  }
+  function shortDate(d) {
+    return d.toLocaleDateString(undefined, {
+      weekday: "short", day: "numeric", month: "short"
+    });
+  }
+  function relativeLabel(iso) {
+    const diffDays = Math.round(
+      (dateFromISO(iso) - TODAY) / (1000 * 60 * 60 * 24)
+    );
+    if (diffDays === 0) return "Today";
+    if (diffDays === 1) return "Tomorrow";
+    if (diffDays === -1) return "Yesterday";
+    if (diffDays > 1)  return "In " + diffDays + " days";
+    return Math.abs(diffDays) + " days ago";
+  }
+
+  /* ---------------- state ---------------- */
+  let currentDateISO = TODAY_ISO;
+  let cellEls  = [];
+  let bookings = [];
+  let selStart = null;
+  let selEnd   = null;
+  let lastClickedIdx = null;
+
+  /* ---------------- storage ---------------- */
+  const storeKey = (iso) => "hourbook:" + iso;
+
+  function loadBookings() {
+    try {
+      const raw = localStorage.getItem(storeKey(currentDateISO));
+      const arr = raw ? JSON.parse(raw) : [];
+      bookings = Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      bookings = [];
+    }
+    bookings.sort((a, b) => a.start - b.start);
+  }
+  function saveBookings() {
+    try {
+      localStorage.setItem(storeKey(currentDateISO), JSON.stringify(bookings));
+    } catch (e) {}
+  }
+
+  /* ---------------- lookups ---------------- */
+  const bookingAt = (m) => bookings.find((b) => m >= b.start && m < b.end);
+  const rangeHasBooking = (s, e) =>
+    bookings.some((b) => s < b.end && e > b.start);
+
+  function nowMinutes() {
+    const n = new Date();
+    return n.getHours() * 60 + n.getMinutes();
+  }
+  const isToday = () => currentDateISO === TODAY_ISO;
+  function isPastSlot(m) {
+    if (!isToday()) return false;
+    return m < nowMinutes();
+  }
+
+  /* ---------------- dropdowns ---------------- */
+  function buildSelects() {
+    const s = $("startSel"), e = $("endSel");
+    let sHtml = "", eHtml = "";
+    for (let m = 0; m < DAY; m += SLOT) {
+      sHtml += '<option value="' + m + '">' + fmt(m) + "</option>";
+    }
+    for (let m = SLOT; m <= DAY; m += SLOT) {
+      const label = fmt(m) + (m === DAY ? " (end of day)" : "");
+      eHtml += '<option value="' + m + '">' + label + "</option>";
+    }
+    s.innerHTML = sHtml;
+    e.innerHTML = eHtml;
+    s.value = "0";
+    e.value = String(SLOT);
+  }
+
+  /* ---------------- timeline ---------------- */
+  function buildTimeline() {
+    const tl = $("timeline");
+    const frag = document.createDocumentFragment();
+    cellEls = new Array(CELLS);
+
+    for (let h = 0; h < 24; h++) {
+      const row = document.createElement("div");
+      row.className = "hour-row";
+
+      const label = document.createElement("div");
+      label.className = "hour-label";
+      label.textContent = fmtHour(h);
+      row.appendChild(label);
+
+      const slots = document.createElement("div");
+      slots.className = "slots";
+
+      for (let s = 0; s < SLOTS_HR; s++) {
+        const idx = h * SLOTS_HR + s;
+        const cell = document.createElement("div");
+        cell.className = "cell" + (s === 3 ? " half" : "");
+        cell.dataset.idx = String(idx);
+        cell.addEventListener("click", () => onCellClick(idx));
+        slots.appendChild(cell);
+        cellEls[idx] = cell;
+      }
+
+      row.appendChild(slots);
+      frag.appendChild(row);
+    }
+
+    tl.innerHTML = "";
+    tl.appendChild(frag);
+  }
+
+  /* ---------------- painting ---------------- */
+  function paint() {
+    for (let i = 0; i < CELLS; i++) {
+      const m  = i * SLOT;
+      const el = cellEls[i];
+      const b  = bookingAt(m);
+      const past = !b && isPastSlot(m);
+
+      el.classList.toggle("booked", !!b);
+      el.classList.toggle("past", past);
+      el.classList.toggle(
+        "selected",
+        !b && !past && selStart !== null && selEnd !== null &&
+        m >= selStart && m < selEnd
+      );
+
+      if (b) {
+        el.title = fmt(b.start) + " – " + fmt(b.end) + "  ·  " + b.name;
+      } else if (past) {
+        el.title = fmt(m) + " – " + fmt(m + SLOT) + "  ·  past";
+      } else {
+        el.title = fmt(m) + " – " + fmt(m + SLOT);
+      }
+    }
+  }
+
+  /* ---------------- sticky bar visibility + spacer ---------------- */
+  function updateStickyBar() {
+    const bar = $("stickyBar");
+    const hasSelection = selStart !== null && selEnd !== null && selEnd > selStart;
+    bar.classList.toggle("visible", hasSelection);
+    document.body.classList.toggle("has-selection", hasSelection);
+  }
+
+  /* ---------------- REMAINING HOURS panel ---------------- */
+  function updateRemaining() {
+    const bookedMinutes = bookings.reduce((acc, b) => acc + (b.end - b.start), 0);
+    const pastMinutes   = isToday() ? nowMinutes() : 0;
+    const usedMinutes   = Math.min(DAY, bookedMinutes + pastMinutes);
+    const remaining     = Math.max(0, DAY - usedMinutes);
+    const percent       = (remaining / DAY) * 100;
+
+    const panel = $("remainingPanel");
+    const value = $("remainingValue");
+    const sub   = $("remainingSub");
+    const fill  = $("remainingBarFill");
+    const label = panel.querySelector(".remaining-label");
+
+    value.textContent = durText(remaining);
+    fill.style.width  = percent.toFixed(1) + "%";
+
+    label.textContent = isToday() ? "Remaining today" : "Remaining this day";
+
+    if (remaining <= 0) {
+      sub.textContent = "Day is fully booked";
+    } else if (remaining >= DAY) {
+      sub.textContent = "of 24 hours free";
+    } else {
+      sub.textContent = "of 24 hours free";
+    }
+
+    /* progress bar color thresholds */
+    panel.classList.remove("bar-high", "bar-mid", "bar-low");
+    if (remaining >= 12 * 60) {          // ≥ 12h
+      panel.classList.add("bar-high");
+    } else if (remaining >= 4 * 60) {    // 4h – 12h
+      panel.classList.add("bar-mid");
+    } else {                             // < 4h
+      panel.classList.add("bar-low");
+    }
+  }
+
+  /* ---------------- UI sync ---------------- */
+  function syncUI() {
+    if (selStart !== null) $("startSel").value = String(selStart);
+    if (selEnd   !== null) $("endSel").value   = String(selEnd);
+
+    const readout = $("readout");
+    const readoutText = $("readoutText");
+    if (selStart !== null && selEnd !== null && selEnd > selStart) {
+      readout.classList.remove("empty");
+      readoutText.textContent = durText(selEnd - selStart);
+    } else {
+      readout.classList.add("empty");
+      readoutText.textContent = "No time selected";
+    }
+
+    const d = dateFromISO(currentDateISO);
+    $("timelineTitle").textContent = isToday()
+      ? "Today's timeline"
+      : "Timeline · " + shortDate(d);
+
+    $("prevDay").disabled = (currentDateISO === TODAY_ISO);
+
+    const big = $("dateBig");
+    const sub = $("dateSub");
+    big.textContent = prettyDate(d);
+
+    if (isToday()) {
+      sub.innerHTML = '<span class="today-chip">Today</span>';
+    } else {
+      sub.textContent = relativeLabel(currentDateISO);
+    }
+
+    updateStickyBar();
+    updateRemaining();
+    paint();
+  }
+
+  function clearSelection() {
+    selStart = null;
+    selEnd   = null;
+    lastClickedIdx = null;
+    $("startSel").value = "0";
+    $("endSel").value   = String(SLOT);
+    hideError();
+    clearNameError();
+    syncUI();
+  }
+
+  /* ---------------- messages ---------------- */
+  function showError(msg) {
+    const el = $("error");
+    el.textContent = msg;
+    el.hidden = false;
+  }
+  function hideError() { $("error").hidden = true; }
+
+  function showNameError(msg) {
+    const el = $("nameError");
+    el.textContent = msg;
+    el.hidden = false;
+    $("nameInput").classList.add("invalid");
+  }
+  function clearNameError() {
+    const el = $("nameError");
+    el.hidden = true;
+    el.textContent = "";
+    $("nameInput").classList.remove("invalid");
+  }
+
+  /* ---------------- interactions ---------------- */
+  function onCellClick(idx) {
+    const m = idx * SLOT;
+
+    if (bookingAt(m)) {
+      const b = bookingAt(m);
+      showError("That time is already booked (" + fmt(b.start) + " – " + fmt(b.end) + ").");
+      return;
+    }
+    if (isPastSlot(m)) {
+      showError("That time has already passed today.");
+      return;
+    }
+
+    const isSingleSelected =
+      selStart !== null &&
+      selEnd !== null &&
+      (selEnd - selStart === SLOT) &&
+      selStart === m;
+
+    if (isSingleSelected) {
+      clearSelection();
+      return;
+    }
+
+    if (selStart === null || selEnd === null || m < selStart) {
+      selStart = m;
+      selEnd   = m + SLOT;
+    } else {
+      if (rangeHasBooking(selStart, m + SLOT)) {
+        showError("That range would overlap an existing booking.");
+        return;
+      }
+      if (isToday() && selStart < nowMinutes()) {
+        showError("Your selection would start in the past.");
+        return;
+      }
+      selEnd = m + SLOT;
+    }
+
+    lastClickedIdx = idx;
+    hideError();
+    syncUI();
+  }
+
+  $("startSel").addEventListener("change", () => {
+    selStart = Number($("startSel").value);
+    if (selEnd === null || selEnd <= selStart) {
+      selEnd = Math.min(selStart + SLOT, DAY);
+    }
+    hideError();
+    syncUI();
+  });
+
+  $("endSel").addEventListener("change", () => {
+    selEnd = Number($("endSel").value);
+    if (selStart === null || selStart >= selEnd) {
+      selStart = Math.max(0, selEnd - SLOT);
+    }
+    hideError();
+    syncUI();
+  });
+
+  $("nameInput").addEventListener("input", () => {
+    if (!$("nameError").hidden) clearNameError();
+  });
+
+  $("clearBtn").addEventListener("click", clearSelection);
+
+  $("bookBtn").addEventListener("click", () => {
+    hideError();
+
+    if (selStart === null || selEnd === null) {
+      showError("Pick a start and end time first.");
+      return;
+    }
+    if (selEnd <= selStart) {
+      showError("The end time must be after the start time.");
+      return;
+    }
+    if (isToday() && selStart < nowMinutes()) {
+      showError("You cannot book a time that already passed today.");
+      return;
+    }
+
+    const clash = bookings.find((b) => selStart < b.end && selEnd > b.start);
+    if (clash) {
+      showError(
+        "That overlaps your booking " + fmt(clash.start) + " – " + fmt(clash.end) +
+        " (" + clash.name + ")."
+      );
+      return;
+    }
+
+    const name = ($("nameInput").value || "").trim();
+    if (!name) {
+      showNameError("Please enter a label to book this slot.");
+      $("nameInput").focus();
+      return;
+    }
+
+    bookings.push({
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      start: selStart,
+      end: selEnd,
+      name: name,
+      dateISO: currentDateISO
+    });
+    bookings.sort((a, b) => a.start - b.start);
+
+    saveBookings();
+    renderList();
+
+    $("nameInput").value = "";
+    clearNameError();
+    selStart = null;
+    selEnd   = null;
+    lastClickedIdx = null;
+    $("startSel").value = "0";
+    $("endSel").value   = String(SLOT);
+    syncUI();
+  });
+
+  /* ---------------- date picker + arrows ---------------- */
+  function applyDate(iso) {
+    selStart = null;
+    selEnd   = null;
+    lastClickedIdx = null;
+    $("startSel").value = "0";
+    $("endSel").value   = String(SLOT);
+    currentDateISO = iso;
+    $("datePicker").value = iso;
+
+    loadBookings();
+    renderList();
+    hideError();
+    clearNameError();
+    syncUI();
+  }
+
+  function initDateControls() {
+    const dp = $("datePicker");
+    dp.min   = TODAY_ISO;
+    dp.value = TODAY_ISO;
+
+    dp.addEventListener("change", () => {
+      let v = dp.value || TODAY_ISO;
+      if (v < TODAY_ISO) v = TODAY_ISO;
+      applyDate(v);
+    });
+
+    $("prevDay").addEventListener("click", () => {
+      const prev = addDays(currentDateISO, -1);
+      if (prev < TODAY_ISO) return;
+      applyDate(prev);
+    });
+
+    $("nextDay").addEventListener("click", () => {
+      applyDate(addDays(currentDateISO, 1));
+    });
+  }
+
+  /* ---------------- list ---------------- */
+  function renderList() {
+    const list = $("list");
+    list.innerHTML = "";
+
+    if (!bookings.length) {
+      list.innerHTML = '<p class="empty">No bookings yet for this day.</p>';
+    } else {
+      bookings.forEach((b) => {
+        const row = document.createElement("div");
+        row.className = "booking";
+        row.innerHTML =
+          '<div class="b-time">' + fmt(b.start) + "<span>→</span>" + fmt(b.end) + "</div>" +
+          '<div class="b-meta"><strong>' + escapeHtml(b.name) + "</strong>" +
+          "<span>" + durText(b.end - b.start) + "</span></div>" +
+          '<button class="del" title="Cancel booking">✕</button>';
+
+        row.querySelector(".del").addEventListener("click", () => {
+          bookings = bookings.filter((x) => x.id !== b.id);
+          saveBookings();
+          renderList();
+          updateRemaining();
+          paint();
+        });
+
+        list.appendChild(row);
+      });
+    }
+
+    const total = bookings.reduce((acc, b) => acc + (b.end - b.start), 0);
+    $("total").textContent = total
+      ? durText(total) + " booked · " + bookings.length +
+        (bookings.length === 1 ? " slot" : " slots")
+      : "";
+  }
+
+  /* ---------------- init ---------------- */
+  buildSelects();
+  buildTimeline();
+  initDateControls();
+  applyDate(TODAY_ISO);
+})();
+</script>
+</body>
+</html>
