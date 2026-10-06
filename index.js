@@ -30,8 +30,10 @@ let collection;
 async function connectDB() {
     try {
         const client = new MongoClient(uri, {
-            serverSelectionTimeoutMS: 10000,
-            autoSelectFamily: false // <-- This line fixes the SSL error
+            maxPoolSize: 10,
+            serverSelectionTimeoutMS: 30000,  // 30 seconds
+            socketTimeoutMS: 45000,
+            connectTimeoutMS: 30000,
         });
         await client.connect();
         db = client.db(dbName);

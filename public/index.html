@@ -585,13 +585,23 @@
   }
 
   /* ---------------- API ---------------- */
-  async function apiGet(dateISO) {
+  async function apiGet(dateISO, attempt = 1) {
+  const maxAttempts = 3;
+  try {
     const res = await fetch(`${API}?date=${encodeURIComponent(dateISO)}`, {
-      cache: "no-store"
+      cache: "no-store",
     });
     if (!res.ok) throw new Error("Load failed (" + res.status + ")");
     return res.json();
+  } catch (err) {
+    if (attempt < maxAttempts) {
+      console.log(`Retry ${attempt}/${maxAttempts}...`);
+      await new Promise((r) => setTimeout(r, attempt * 2000)); // 2s, 4s waits
+      return apiGet(dateISO, attempt + 1);
+    }
+    throw err;
   }
+}
   async function apiPost(payload) {
     const res = await fetch(API, {
       method: "POST",
