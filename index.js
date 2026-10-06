@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // ---------- Serve frontend ----------
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, "public")));
 
 // ---------- MongoDB ----------
 const uri = process.env.MONGODB_URI;
@@ -141,7 +141,7 @@ app.delete("/api/bookings", async (req, res) => {
 
 // ---------- Fallback: send index.html ----------
 app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // ---------- Start ----------
