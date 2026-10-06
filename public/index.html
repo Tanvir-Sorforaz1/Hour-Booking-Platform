@@ -596,7 +596,7 @@
   } catch (err) {
     if (attempt < maxAttempts) {
       console.log(`Retry ${attempt}/${maxAttempts}...`);
-      await new Promise((r) => setTimeout(r, attempt * 2000)); // 2s, 4s waits
+      await new Promise((r) => setTimeout(r, attempt * 10000)); // 2s, 4s waits
       return apiGet(dateISO, attempt + 1);
     }
     throw err;
