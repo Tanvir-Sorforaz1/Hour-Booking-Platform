@@ -145,8 +145,5 @@ app.get("*", (req, res) => {
 });
 
 // ---------- Start ----------
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`\n🚀 Server running at http://localhost:${PORT}\n`);
-    });
-});
+connectDB();
+module.exports = app;
