@@ -586,7 +586,7 @@
 
   /* ---------------- API ---------------- */
   async function apiGet(dateISO, attempt = 1) {
-  const maxAttempts = 10;
+  const maxAttempts = 20;
   try {
     const res = await fetch(`${API}?date=${encodeURIComponent(dateISO)}`, {
       cache: "no-store",
