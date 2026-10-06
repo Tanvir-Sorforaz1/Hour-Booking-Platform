@@ -20,16 +20,14 @@
     --booked1:#ff7a7a;
     --booked2:#dc3f3f;
 
-    --prev1:#ff8a4c;
     --prev2:#ff4d6d;
-    --next1:#4facfe;
     --next2:#7c5cff;
+    --next1:#4facfe;
 
-    /* flat colors */
-    --bar-high:#22c55e;   /* green  */
-    --bar-mid:#a16207;    /* brown  */
-    --bar-low:#dc2626;    /* red    */
-    --rem-red:#ff4d4d;    /* red for value text */
+    --bar-high:#22c55e;
+    --bar-mid:#a16207;
+    --bar-low:#dc2626;
+    --rem-red:#ff4d4d;
   }
 
   *{box-sizing:border-box}
@@ -63,129 +61,82 @@
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   .sub{margin:0;color:var(--muted);font-size:13.5px;line-height:1.5;max-width:52ch}
+  .conn{
+    margin-top:8px;font-size:11.5px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;
+    padding:4px 10px;border-radius:999px;
+    border:1px solid var(--line);background:var(--panel2);color:var(--muted);
+  }
+  .conn .dot{width:7px;height:7px;border-radius:50%;background:#5a6478}
+  .conn.ok .dot{background:var(--sel1)}
+  .conn.ok{color:#9bffce;border-color:rgba(55,214,122,.4)}
+  .conn.err .dot{background:var(--booked2)}
+  .conn.err{color:#ffb0b0;border-color:rgba(255,107,107,.4)}
 
   /* ---------- date banner ---------- */
   .date-banner{
     position:relative;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    align-items:stretch;
-    padding:14px 16px;
-    border-radius:16px;
+    display:flex;flex-direction:column;gap:8px;align-items:stretch;
+    padding:14px 16px;border-radius:16px;
     background:linear-gradient(180deg, rgba(124,92,255,.14), rgba(79,140,255,.06)), var(--panel);
     border:1px solid rgba(124,92,255,.45);
-    box-shadow:
-      0 0 0 1px rgba(124,92,255,.15),
-      0 18px 40px -22px rgba(124,92,255,.7),
+    box-shadow:0 0 0 1px rgba(124,92,255,.15), 0 18px 40px -22px rgba(124,92,255,.7),
       inset 0 1px 0 rgba(255,255,255,.06);
     min-width:300px;
   }
-
   .date-banner .tag{
     font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
     color:#c7b6ff;font-weight:800;
     display:flex;align-items:center;gap:6px;
   }
   .date-banner .tag::before{
-    content:"";
-    width:7px;height:7px;border-radius:50%;
-    background:var(--next1);
+    content:"";width:7px;height:7px;border-radius:50%;background:var(--next1);
   }
-
-  .date-row{
-    display:grid;
-    grid-template-columns:52px 1fr 52px;
-    gap:8px;
-    align-items:center;
-  }
-
+  .date-row{display:grid;grid-template-columns:52px 1fr 52px;gap:8px;align-items:center}
   .nav-btn{
-    border:none;
-    color:#fff;
-    border-radius:12px;
-    width:52px;height:52px;
-    padding:0;
-    font-size:22px;
-    font-weight:800;
-    line-height:1;
-    display:grid;place-items:center;
-    cursor:pointer;
+    border:none;color:#fff;border-radius:12px;
+    width:52px;height:52px;padding:0;
+    font-size:22px;font-weight:800;line-height:1;
+    display:grid;place-items:center;cursor:pointer;
     transition:transform .12s ease, filter .15s ease;
-    user-select:none;
-    font-family:inherit;
+    user-select:none;font-family:inherit;
   }
   .nav-btn.prev{background:var(--prev2)}
   .nav-btn.next{background:var(--next2)}
   .nav-btn:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-1px)}
   .nav-btn:active:not(:disabled){transform:translateY(1px) scale(.98)}
-  .nav-btn:disabled{
-    background:#232a38;color:#5e6a80;cursor:not-allowed;opacity:.6;
-  }
+  .nav-btn:disabled{background:#232a38;color:#5e6a80;cursor:not-allowed;opacity:.6}
 
   .date-input-wrap{position:relative}
   .date-input-wrap input[type=date]{
-    width:100%;
-    background:rgba(0,0,0,.32);
+    width:100%;background:rgba(0,0,0,.32);
     border:1px solid rgba(124,92,255,.45);
-    color:#fff;
-    border-radius:12px;
-    padding:0 12px;
-    height:52px;
-    font-size:15px;
-    font-weight:600;
-    font-family:inherit;
-    outline:none;
-    color-scheme:dark;
-    cursor:pointer;
-    text-align:center;
-    letter-spacing:.02em;
+    color:#fff;border-radius:12px;padding:0 12px;height:52px;
+    font-size:15px;font-weight:600;font-family:inherit;outline:none;
+    color-scheme:dark;cursor:pointer;text-align:center;letter-spacing:.02em;
     transition:border-color .15s, box-shadow .15s;
   }
-  .date-input-wrap input[type=date]:hover{
-    background:rgba(0,0,0,.45);
-    border-color:rgba(124,92,255,.7);
-  }
-  .date-input-wrap input[type=date]:focus{
-    border-color:#7c5cff;
-    box-shadow:0 0 0 4px rgba(124,92,255,.25);
-  }
+  .date-input-wrap input[type=date]:hover{background:rgba(0,0,0,.45);border-color:rgba(124,92,255,.7)}
+  .date-input-wrap input[type=date]:focus{border-color:#7c5cff;box-shadow:0 0 0 4px rgba(124,92,255,.25)}
 
   .date-big{
-    text-align:center;
-    font-size:15.5px;
-    font-weight:750;
-    letter-spacing:.01em;
-    color:#e5ecff;
-    padding:2px 0 0;
+    text-align:center;font-size:15.5px;font-weight:750;
+    letter-spacing:.01em;color:#e5ecff;padding:2px 0 0;
   }
   .date-sub{
-    text-align:center;
-    font-size:11.5px;
-    color:#a8b3c7;
-    margin-top:-4px;
-    font-weight:500;
-    min-height:18px;
+    text-align:center;font-size:11.5px;color:#a8b3c7;
+    margin-top:-4px;font-weight:500;min-height:18px;
   }
   .date-sub .today-chip{
-    display:inline-block;
-    padding:2px 9px;
-    border-radius:999px;
-    background:var(--sel2);
-    color:#07230f;
-    font-weight:800;
-    font-size:10.5px;
-    letter-spacing:.06em;
-    text-transform:uppercase;
+    display:inline-block;padding:2px 9px;border-radius:999px;
+    background:var(--sel2);color:#07230f;font-weight:800;
+    font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
   }
 
   /* ---------- panels ---------- */
   .panel{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:18px;
-    padding:16px;
-    box-shadow:0 20px 44px -30px #000;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:18px;padding:16px;box-shadow:0 20px 44px -30px #000;
   }
   .panel-head{
     display:flex;align-items:center;justify-content:space-between;
@@ -194,122 +145,69 @@
   .panel-head h2{margin:0;font-size:14px;letter-spacing:.02em;font-weight:650}
   .total{font-size:12px;color:var(--muted)}
 
-  /* ========================================================
-     REMAINING HOURS — same bg as page (no colored block)
-     White labels, red value, colored progress bar
-     ======================================================== */
+  /* ---------- remaining hours ---------- */
   .remaining-panel{
-    display:flex;
-    align-items:center;
-    gap:16px;
-    padding:16px 18px;
-    border-radius:18px;
-    background:var(--panel);
-    border:1px solid var(--line);
+    display:flex;align-items:center;gap:16px;
+    padding:16px 18px;border-radius:18px;
+    background:var(--panel);border:1px solid var(--line);
     box-shadow:0 20px 44px -30px #000;
   }
-
   .remaining-icon{
-    flex:none;
-    width:52px;height:52px;
-    border-radius:14px;
-    display:grid;place-items:center;
-    background:var(--panel2);
-    border:1px solid var(--line);
-    font-size:22px;
-    color:#e8ecf4;
+    flex:none;width:52px;height:52px;border-radius:14px;
+    display:grid;place-items:center;background:var(--panel2);
+    border:1px solid var(--line);font-size:22px;color:#e8ecf4;
   }
-
-  .remaining-info{
-    display:flex;
-    flex-direction:column;
-    gap:3px;
-    flex:1;
-    min-width:0;
-  }
+  .remaining-info{display:flex;flex-direction:column;gap:3px;flex:1;min-width:0}
   .remaining-label{
-    font-size:10.5px;
-    letter-spacing:.16em;
-    text-transform:uppercase;
-    font-weight:800;
-    color:#ffffff;
+    font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    font-weight:800;color:#ffffff;
   }
-
   .remaining-value{
-    font-size:clamp(24px, 4.6vw, 34px);
-    font-weight:850;
-    letter-spacing:-.02em;
-    font-variant-numeric:tabular-nums;
-    line-height:1.05;
-    color:var(--rem-red);
+    font-size:clamp(24px, 4.6vw, 34px);font-weight:850;
+    letter-spacing:-.02em;font-variant-numeric:tabular-nums;
+    line-height:1.05;color:var(--rem-red);
   }
   .remaining-sub{
-    font-size:12px;
-    color:#ffffff;
-    font-weight:500;
+    font-size:12px;color:#ffffff;font-weight:500;
     font-variant-numeric:tabular-nums;
   }
-
-  /* progress bar */
   .remaining-bar{
-    flex:none;
-    width:120px;
-    height:8px;
-    border-radius:999px;
-    background:rgba(255,255,255,.1);
-    overflow:hidden;
+    flex:none;width:120px;height:8px;border-radius:999px;
+    background:rgba(255,255,255,.1);overflow:hidden;
   }
   .remaining-bar-fill{
-    height:100%;
-    width:100%;
-    border-radius:999px;
+    height:100%;width:100%;border-radius:999px;
     background:var(--bar-high);
     transition:width .35s cubic-bezier(.2,.9,.25,1), background .2s ease;
   }
-
-  /* bar color states */
   .remaining-panel.bar-high .remaining-bar-fill{background:var(--bar-high)}
   .remaining-panel.bar-mid  .remaining-bar-fill{background:var(--bar-mid)}
   .remaining-panel.bar-low  .remaining-bar-fill{background:var(--bar-low)}
 
-  /* ---------- bookings summary panel ---------- */
+  /* ---------- bookings ---------- */
   .bookings-panel{
-    background:var(--panel);
-    border:1px solid rgba(55,214,122,.28);
+    background:var(--panel);border:1px solid rgba(55,214,122,.28);
     box-shadow:0 20px 44px -30px #000;
   }
-  .bookings-panel .panel-head h2{
-    display:flex;align-items:center;gap:8px;
-  }
+  .bookings-panel .panel-head h2{display:flex;align-items:center;gap:8px}
   .bookings-panel .panel-head h2::before{
-    content:"";
-    width:8px;height:8px;border-radius:2px;
-    background:var(--sel1);
+    content:"";width:8px;height:8px;border-radius:2px;background:var(--sel1);
   }
-
   .list{display:flex;flex-direction:column;gap:9px}
   .empty{margin:4px 2px;color:var(--muted);font-size:13px}
-
   .booking{
     display:flex;align-items:center;gap:14px;
-    background:var(--panel2);
-    border:1px solid rgba(55,214,122,.32);
-    border-left:3px solid var(--sel1);
-    border-radius:12px;
-    padding:11px 13px;
+    background:var(--panel2);border:1px solid rgba(55,214,122,.32);
+    border-left:3px solid var(--sel1);border-radius:12px;padding:11px 13px;
   }
-
   .b-time{
-    font-variant-numeric:tabular-nums;
-    font-weight:650;font-size:13.5px;
-    display:flex;align-items:center;gap:7px;
-    white-space:nowrap;
+    font-variant-numeric:tabular-nums;font-weight:650;font-size:13.5px;
+    display:flex;align-items:center;gap:7px;white-space:nowrap;
   }
   .b-time span{color:#8fdcb0;font-weight:400}
   .b-meta{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}
   .b-meta strong{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .b-meta span{font-size:11.5px;color:#93a2b8}
-
   .del{
     background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--muted);
     border-radius:9px;width:32px;height:32px;padding:0;font-size:13px;line-height:1;
@@ -326,114 +224,63 @@
   .sw.booked{background:var(--booked2)}
 
   .timeline{
-    background:rgba(0,0,0,.22);
-    border:1px solid var(--line);
-    border-radius:14px;
-    padding:8px 10px 8px 6px;
-    overflow:visible;
+    background:rgba(0,0,0,.22);border:1px solid var(--line);
+    border-radius:14px;padding:8px 10px 8px 6px;overflow:visible;
   }
-
   .hour-row{
-    display:grid;
-    grid-template-columns:78px 1fr;
-    align-items:stretch;
-    height:30px;
+    display:grid;grid-template-columns:78px 1fr;align-items:stretch;height:30px;
   }
   .hour-row + .hour-row{border-top:1px solid rgba(255,255,255,.035)}
-
   .hour-label{
-    display:flex;align-items:center;justify-content:flex-end;
-    padding-right:10px;
-    font-size:10.5px;color:#69738a;
-    font-variant-numeric:tabular-nums;
-    letter-spacing:.03em;
-    white-space:nowrap;
+    display:flex;align-items:center;justify-content:flex-end;padding-right:10px;
+    font-size:10.5px;color:#69738a;font-variant-numeric:tabular-nums;
+    letter-spacing:.03em;white-space:nowrap;
   }
-
   .slots{
-    display:grid;
-    grid-template-columns:repeat(6,1fr);
-    gap:2px;
-    padding:3px 0;
+    display:grid;grid-template-columns:repeat(6,1fr);gap:2px;padding:3px 0;
   }
-
   .cell{
-    background:var(--free);
-    border-radius:4px;
-    cursor:pointer;
-    transition:background .13s ease;
-    position:relative;
+    background:var(--free);border-radius:4px;cursor:pointer;
+    transition:background .13s ease;position:relative;
   }
   .cell:hover{background:var(--free-hover)}
   .cell.half{margin-left:5px}
-  .cell.selected{
-    background:var(--sel1);
-    box-shadow:0 0 0 1px rgba(55,214,122,.45);
-  }
+  .cell.selected{background:var(--sel1);box-shadow:0 0 0 1px rgba(55,214,122,.45)}
   .cell.booked{
-    background:var(--booked2);
-    cursor:not-allowed;
+    background:var(--booked2);cursor:not-allowed;
     box-shadow:0 0 0 1px rgba(255,107,107,.3);
   }
   .cell.booked:hover{background:var(--booked2)}
-
   .cell.past{
     background:repeating-linear-gradient(45deg,#171b23,#171b23 4px,#1c212b 4px,#1c212b 8px);
-    cursor:not-allowed;
-    opacity:.55;
+    cursor:not-allowed;opacity:.55;
   }
   .cell.past:hover{background:repeating-linear-gradient(45deg,#171b23,#171b23 4px,#1c212b 4px,#1c212b 8px)}
 
-  /* spacer */
   .sticky-spacer{
-    height:0;
-    transition:height .32s cubic-bezier(.2,.9,.25,1);
+    height:0;transition:height .32s cubic-bezier(.2,.9,.25,1);
     pointer-events:none;
   }
   body.has-selection .sticky-spacer{height:150px}
 
-  /* ---------- STICKY ACTION BAR ---------- */
+  /* ---------- sticky bar ---------- */
   .sticky-bar{
-    position:fixed;
-    left:50%;
-    bottom:0;
-    transform:translate(-50%, 120%);
-    width:100%;
-    max-width:920px;
+    position:fixed;left:50%;bottom:0;transform:translate(-50%, 120%);
+    width:100%;max-width:920px;
     padding:14px 16px calc(14px + env(safe-area-inset-bottom, 0px));
-    z-index:50;
-    background:rgba(11,13,18,.98);
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
+    z-index:50;background:rgba(11,13,18,.98);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
     border-top:1px solid rgba(55,214,122,.35);
-    border-left:1px solid var(--line);
-    border-right:1px solid var(--line);
+    border-left:1px solid var(--line);border-right:1px solid var(--line);
     border-radius:18px 18px 0 0;
     box-shadow:0 -18px 40px -22px rgba(0,0,0,.95);
     transition:transform .32s cubic-bezier(.2,.9,.25,1), opacity .25s ease;
-    opacity:0;
-    pointer-events:none;
+    opacity:0;pointer-events:none;
   }
-  .sticky-bar.visible{
-    transform:translate(-50%, 0);
-    opacity:1;
-    pointer-events:auto;
-  }
+  .sticky-bar.visible{transform:translate(-50%, 0);opacity:1;pointer-events:auto}
 
-  .sticky-inner{
-    display:flex;
-    align-items:flex-end;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-
-  .sticky-fields{
-    display:flex;
-    gap:10px;
-    flex:1 1 auto;
-    min-width:0;
-    flex-wrap:wrap;
-  }
+  .sticky-inner{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+  .sticky-fields{display:flex;gap:10px;flex:1 1 auto;min-width:0;flex-wrap:wrap}
 
   .sfield{display:flex;flex-direction:column;gap:5px;min-width:104px}
   .sfield.grow{flex:1 1 160px}
@@ -443,16 +290,10 @@
   }
   .sfield select,
   .sfield input[type=text]{
-    width:100%;
-    background:var(--panel2);
-    border:1px solid rgba(55,214,122,.28);
-    color:var(--text);
-    border-radius:10px;
-    padding:9px 11px;
-    font-size:13.5px;
-    font-family:inherit;
-    font-variant-numeric:tabular-nums;
-    outline:none;
+    width:100%;background:var(--panel2);
+    border:1px solid rgba(55,214,122,.28);color:var(--text);
+    border-radius:10px;padding:9px 11px;font-size:13.5px;
+    font-family:inherit;font-variant-numeric:tabular-nums;outline:none;
     transition:border-color .15s, box-shadow .15s;
   }
   .sfield select{
@@ -468,91 +309,56 @@
     box-shadow:0 0 0 3px rgba(55,214,122,.18);
   }
   .sfield input::placeholder{color:#5f6a7e}
-
   .sfield input.invalid{
-    border-color:#ff5a5a;
-    box-shadow:0 0 0 3px rgba(255,90,90,.2);
+    border-color:#ff5a5a;box-shadow:0 0 0 3px rgba(255,90,90,.2);
   }
-
   .sfield-error{
-    display:block;
-    margin-top:4px;
-    font-size:11.5px;
-    color:#ff7a7a;
-    font-weight:600;
-    line-height:1.3;
+    display:block;margin-top:4px;font-size:11.5px;
+    color:#ff7a7a;font-weight:600;line-height:1.3;
   }
 
   .sticky-actions{
-    display:flex;
-    gap:10px;
-    flex:0 0 auto;
-    align-items:center;
-    flex-wrap:wrap;
+    display:flex;gap:10px;flex:0 0 auto;align-items:center;flex-wrap:wrap;
   }
-
   .btn{
     font-family:inherit;font-size:13.5px;font-weight:700;
     border-radius:11px;padding:12px 18px;cursor:pointer;
     border:1px solid transparent;
     transition:transform .12s ease, filter .15s ease, background .15s, border-color .15s;
-    color:#fff;
-    white-space:nowrap;
+    color:#fff;white-space:nowrap;
   }
   .btn:active{transform:translateY(1px)}
-  .btn-primary{
-    background:var(--sel2);
-    color:#fff;
-  }
+  .btn-primary{background:var(--sel2);color:#fff}
   .btn-primary:hover{filter:brightness(1.1)}
+  .btn-primary:disabled{opacity:.6;cursor:not-allowed;filter:none}
   .btn-ghost{
     background:transparent;border-color:rgba(255,255,255,.12);color:var(--muted);
   }
   .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.25);background:rgba(255,255,255,.04)}
 
   .sticky-readout{
-    display:flex;align-items:center;gap:10px;
-    padding:9px 15px;
-    background:rgba(255,77,77,.1);
-    border:1px solid rgba(255,77,77,.45);
-    border-radius:11px;
-    font-variant-numeric:tabular-nums;
-    white-space:nowrap;
-    min-height:42px;
+    display:flex;align-items:center;gap:10px;padding:9px 15px;
+    background:rgba(255,77,77,.1);border:1px solid rgba(255,77,77,.45);
+    border-radius:11px;font-variant-numeric:tabular-nums;
+    white-space:nowrap;min-height:42px;
   }
   .sticky-readout .dot{
-    width:8px;height:8px;border-radius:50%;
-    background:var(--rem-red);
-    flex:none;
+    width:8px;height:8px;border-radius:50%;background:var(--rem-red);flex:none;
   }
-  .sticky-readout .dur-text{
-    font-size:17px;
-    font-weight:800;
-    color:var(--rem-red);
-  }
-  .sticky-readout.empty{
-    background:rgba(255,255,255,.03);
-    border-color:rgba(255,255,255,.08);
-  }
+  .sticky-readout .dur-text{font-size:17px;font-weight:800;color:var(--rem-red)}
+  .sticky-readout.empty{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.08)}
   .sticky-readout.empty .dot{background:#5a6478}
-  .sticky-readout.empty .dur-text{
-    color:var(--muted);font-size:13px;font-weight:500;
-  }
+  .sticky-readout.empty .dur-text{color:var(--muted);font-size:13px;font-weight:500}
 
   .sticky-error{
-    margin-top:10px;
-    background:rgba(255,107,107,.12);
-    border:1px solid rgba(255,107,107,.4);
-    color:#ffc2c2;
-    border-radius:10px;
-    padding:9px 12px;
-    font-size:12.5px;
+    margin-top:10px;background:rgba(255,107,107,.12);
+    border:1px solid rgba(255,107,107,.4);color:#ffc2c2;
+    border-radius:10px;padding:9px 12px;font-size:12.5px;
   }
 
   /* ---------- responsive ---------- */
   @media (max-width:560px){
     body{padding:22px 12px 24px}
-
     .hour-row{grid-template-columns:64px 1fr;height:28px}
     .hour-label{font-size:9px;padding-right:6px;letter-spacing:0}
     .cell.half{margin-left:3px}
@@ -570,28 +376,16 @@
     .remaining-bar{width:100%;order:3;height:7px}
 
     .sticky-bar{padding:10px 12px calc(10px + env(safe-area-inset-bottom, 0px))}
-    .sticky-inner{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      align-items:end;
-    }
+    .sticky-inner{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:end}
     .sticky-fields{display:contents}
     .sfield{min-width:0}
     .sfield.grow{grid-column:1 / -1;flex:unset}
-
     .sticky-actions{
-      grid-column:1 / -1;
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-      margin-top:2px;
+      grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;
+      gap:8px;margin-top:2px;
     }
     .sticky-readout{
-      grid-column:1 / -1;
-      justify-content:center;
-      padding:7px 10px;
-      min-height:0;
+      grid-column:1 / -1;justify-content:center;padding:7px 10px;min-height:0;
     }
     .sticky-readout .dur-text{font-size:16px}
     .sticky-readout.empty .dur-text{font-size:12px}
@@ -608,6 +402,10 @@
     <div>
       <h1>Book your hours</h1>
       <p class="sub">Pick any date from today onward and reserve any slice of its 24 hours with 10-minute precision.</p>
+      <span id="connStatus" class="conn">
+        <span class="dot"></span>
+        <span id="connText">Connecting…</span>
+      </span>
     </div>
 
     <div class="date-banner">
@@ -657,7 +455,6 @@
       </div>
     </div>
     <div id="timeline" class="timeline"></div>
-
     <div class="sticky-spacer" aria-hidden="true"></div>
   </section>
 
@@ -687,8 +484,8 @@
         <span class="dot"></span>
         <span id="readoutText" class="dur-text">No time selected</span>
       </div>
-      <button id="bookBtn" class="btn btn-primary">Book this slot</button>
-      <button id="clearBtn" class="btn btn-ghost">Clear</button>
+      <button id="bookBtn" class="btn btn-primary" type="button">Book this slot</button>
+      <button id="clearBtn" class="btn btn-ghost" type="button">Clear</button>
     </div>
   </div>
   <div id="error" class="sticky-error" hidden></div>
@@ -702,15 +499,14 @@
   const DAY      = 24 * 60;
   const CELLS    = DAY / SLOT;
   const SLOTS_HR = 60 / SLOT;
+  const API      = "/api/bookings";
 
   const $   = (id) => document.getElementById(id);
   const pad = (n) => String(n).padStart(2, "0");
 
   /* ---------------- date helpers ---------------- */
   function startOfToday() {
-    const d = new Date();
-    d.setHours(0, 0, 0, 0);
-    return d;
+    const d = new Date(); d.setHours(0, 0, 0, 0); return d;
   }
   function isoLocal(d) {
     return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
@@ -720,9 +516,7 @@
     return new Date(y, m - 1, d);
   }
   function addDays(iso, n) {
-    const d = dateFromISO(iso);
-    d.setDate(d.getDate() + n);
-    return isoLocal(d);
+    const d = dateFromISO(iso); d.setDate(d.getDate() + n); return isoLocal(d);
   }
 
   const TODAY     = startOfToday();
@@ -734,14 +528,12 @@
     let h = Math.floor(total / 60);
     const min = total % 60;
     const ampm = h >= 12 ? "PM" : "AM";
-    h = h % 12;
-    if (h === 0) h = 12;
+    h = h % 12; if (h === 0) h = 12;
     return h + ":" + pad(min) + " " + ampm;
   }
   function fmtHour(h24) {
     const ampm = h24 >= 12 ? "PM" : "AM";
-    let h = h24 % 12;
-    if (h === 0) h = 12;
+    let h = h24 % 12; if (h === 0) h = 12;
     return h + " " + ampm;
   }
   function durText(mins) {
@@ -766,9 +558,7 @@
     });
   }
   function relativeLabel(iso) {
-    const diffDays = Math.round(
-      (dateFromISO(iso) - TODAY) / (1000 * 60 * 60 * 24)
-    );
+    const diffDays = Math.round((dateFromISO(iso) - TODAY) / 86400000);
     if (diffDays === 0) return "Today";
     if (diffDays === 1) return "Tomorrow";
     if (diffDays === -1) return "Yesterday";
@@ -783,24 +573,60 @@
   let selStart = null;
   let selEnd   = null;
   let lastClickedIdx = null;
+  let isLoading = false;
 
-  /* ---------------- storage ---------------- */
-  const storeKey = (iso) => "hourbook:" + iso;
-
-  function loadBookings() {
-    try {
-      const raw = localStorage.getItem(storeKey(currentDateISO));
-      const arr = raw ? JSON.parse(raw) : [];
-      bookings = Array.isArray(arr) ? arr : [];
-    } catch (e) {
-      bookings = [];
-    }
-    bookings.sort((a, b) => a.start - b.start);
+  /* ---------------- connection status ---------------- */
+  function setConn(state, text) {
+    const el = $("connStatus");
+    el.classList.remove("ok", "err");
+    if (state === "ok")  el.classList.add("ok");
+    if (state === "err") el.classList.add("err");
+    $("connText").textContent = text;
   }
-  function saveBookings() {
+
+  /* ---------------- API ---------------- */
+  async function apiGet(dateISO) {
+    const res = await fetch(`${API}?date=${encodeURIComponent(dateISO)}`, {
+      cache: "no-store"
+    });
+    if (!res.ok) throw new Error("Load failed (" + res.status + ")");
+    return res.json();
+  }
+  async function apiPost(payload) {
+    const res = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Book failed");
+    return data;
+  }
+  async function apiDelete(id) {
+    const res = await fetch(`${API}?id=${encodeURIComponent(id)}`, {
+      method: "DELETE"
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || "Delete failed");
+    return data;
+  }
+
+  /* ---------------- load bookings from server ---------------- */
+  async function loadBookings() {
+    if (isLoading) return;
+    isLoading = true;
     try {
-      localStorage.setItem(storeKey(currentDateISO), JSON.stringify(bookings));
-    } catch (e) {}
+      const list = await apiGet(currentDateISO);
+      bookings = Array.isArray(list) ? list : [];
+      bookings.sort((a, b) => a.start - b.start);
+      setConn("ok", "Connected");
+    } catch (e) {
+      console.error(e);
+      bookings = [];
+      setConn("err", "Offline (server unreachable)");
+    } finally {
+      isLoading = false;
+    }
   }
 
   /* ---------------- lookups ---------------- */
@@ -829,10 +655,8 @@
       const label = fmt(m) + (m === DAY ? " (end of day)" : "");
       eHtml += '<option value="' + m + '">' + label + "</option>";
     }
-    s.innerHTML = sHtml;
-    e.innerHTML = eHtml;
-    s.value = "0";
-    e.value = String(SLOT);
+    s.innerHTML = sHtml; e.innerHTML = eHtml;
+    s.value = "0"; e.value = String(SLOT);
   }
 
   /* ---------------- timeline ---------------- */
@@ -897,7 +721,7 @@
     }
   }
 
-  /* ---------------- sticky bar visibility + spacer ---------------- */
+  /* ---------------- sticky bar ---------------- */
   function updateStickyBar() {
     const bar = $("stickyBar");
     const hasSelection = selStart !== null && selEnd !== null && selEnd > selStart;
@@ -905,7 +729,7 @@
     document.body.classList.toggle("has-selection", hasSelection);
   }
 
-  /* ---------------- REMAINING HOURS panel ---------------- */
+  /* ---------------- remaining hours ---------------- */
   function updateRemaining() {
     const bookedMinutes = bookings.reduce((acc, b) => acc + (b.end - b.start), 0);
     const pastMinutes   = isToday() ? nowMinutes() : 0;
@@ -926,19 +750,16 @@
 
     if (remaining <= 0) {
       sub.textContent = "Day is fully booked";
-    } else if (remaining >= DAY) {
-      sub.textContent = "of 24 hours free";
     } else {
       sub.textContent = "of 24 hours free";
     }
 
-    /* progress bar color thresholds */
     panel.classList.remove("bar-high", "bar-mid", "bar-low");
-    if (remaining >= 12 * 60) {          // ≥ 12h
+    if (remaining >= 12 * 60) {
       panel.classList.add("bar-high");
-    } else if (remaining >= 4 * 60) {    // 4h – 12h
+    } else if (remaining >= 4 * 60) {
       panel.classList.add("bar-mid");
-    } else {                             // < 4h
+    } else {
       panel.classList.add("bar-low");
     }
   }
@@ -965,10 +786,9 @@
 
     $("prevDay").disabled = (currentDateISO === TODAY_ISO);
 
-    const big = $("dateBig");
-    const sub = $("dateSub");
-    big.textContent = prettyDate(d);
+    $("dateBig").textContent = prettyDate(d);
 
+    const sub = $("dateSub");
     if (isToday()) {
       sub.innerHTML = '<span class="today-chip">Today</span>';
     } else {
@@ -1012,7 +832,7 @@
     $("nameInput").classList.remove("invalid");
   }
 
-  /* ---------------- interactions ---------------- */
+  /* ---------------- cell click ---------------- */
   function onCellClick(idx) {
     const m = idx * SLOT;
 
@@ -1057,6 +877,7 @@
     syncUI();
   }
 
+  /* ---------------- input events ---------------- */
   $("startSel").addEventListener("change", () => {
     selStart = Number($("startSel").value);
     if (selEnd === null || selEnd <= selStart) {
@@ -1079,9 +900,18 @@
     if (!$("nameError").hidden) clearNameError();
   });
 
+  /* ---------- ENTER key presses "Book this slot" ---------- */
+  $("nameInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      $("bookBtn").click();
+    }
+  });
+
   $("clearBtn").addEventListener("click", clearSelection);
 
-  $("bookBtn").addEventListener("click", () => {
+  /* ---------------- book button ---------------- */
+  $("bookBtn").addEventListener("click", async () => {
     hideError();
 
     if (selStart === null || selEnd === null) {
@@ -1113,30 +943,44 @@
       return;
     }
 
-    bookings.push({
-      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      start: selStart,
-      end: selEnd,
-      name: name,
-      dateISO: currentDateISO
-    });
-    bookings.sort((a, b) => a.start - b.start);
+    const btn = $("bookBtn");
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Booking…";
 
-    saveBookings();
-    renderList();
+    try {
+      await apiPost({
+        start: selStart,
+        end: selEnd,
+        name: name,
+        dateISO: currentDateISO
+      });
 
-    $("nameInput").value = "";
-    clearNameError();
-    selStart = null;
-    selEnd   = null;
-    lastClickedIdx = null;
-    $("startSel").value = "0";
-    $("endSel").value   = String(SLOT);
-    syncUI();
+      // Reset form
+      $("nameInput").value = "";
+      clearNameError();
+      selStart = null;
+      selEnd   = null;
+      lastClickedIdx = null;
+      $("startSel").value = "0";
+      $("endSel").value   = String(SLOT);
+
+      // Reload from server (source of truth)
+      await loadBookings();
+      renderList();
+      syncUI();
+      setConn("ok", "Connected");
+    } catch (e) {
+      showError(e.message);
+      setConn("err", "Server error");
+    } finally {
+      btn.disabled = false;
+      btn.textContent = originalText;
+    }
   });
 
   /* ---------------- date picker + arrows ---------------- */
-  function applyDate(iso) {
+  async function applyDate(iso) {
     selStart = null;
     selEnd   = null;
     lastClickedIdx = null;
@@ -1145,10 +989,11 @@
     currentDateISO = iso;
     $("datePicker").value = iso;
 
-    loadBookings();
-    renderList();
     hideError();
     clearNameError();
+
+    await loadBookings();
+    renderList();
     syncUI();
   }
 
@@ -1157,20 +1002,20 @@
     dp.min   = TODAY_ISO;
     dp.value = TODAY_ISO;
 
-    dp.addEventListener("change", () => {
+    dp.addEventListener("change", async () => {
       let v = dp.value || TODAY_ISO;
       if (v < TODAY_ISO) v = TODAY_ISO;
-      applyDate(v);
+      await applyDate(v);
     });
 
-    $("prevDay").addEventListener("click", () => {
+    $("prevDay").addEventListener("click", async () => {
       const prev = addDays(currentDateISO, -1);
       if (prev < TODAY_ISO) return;
-      applyDate(prev);
+      await applyDate(prev);
     });
 
-    $("nextDay").addEventListener("click", () => {
-      applyDate(addDays(currentDateISO, 1));
+    $("nextDay").addEventListener("click", async () => {
+      await applyDate(addDays(currentDateISO, 1));
     });
   }
 
@@ -1189,14 +1034,23 @@
           '<div class="b-time">' + fmt(b.start) + "<span>→</span>" + fmt(b.end) + "</div>" +
           '<div class="b-meta"><strong>' + escapeHtml(b.name) + "</strong>" +
           "<span>" + durText(b.end - b.start) + "</span></div>" +
-          '<button class="del" title="Cancel booking">✕</button>';
+          '<button class="del" title="Cancel booking" type="button">✕</button>';
 
-        row.querySelector(".del").addEventListener("click", () => {
-          bookings = bookings.filter((x) => x.id !== b.id);
-          saveBookings();
-          renderList();
-          updateRemaining();
-          paint();
+        row.querySelector(".del").addEventListener("click", async () => {
+          const btn = row.querySelector(".del");
+          btn.disabled = true;
+          try {
+            await apiDelete(b.id);
+            bookings = bookings.filter((x) => x.id !== b.id);
+            renderList();
+            updateRemaining();
+            paint();
+          } catch (e) {
+            console.error(e);
+            alert("Failed to delete: " + e.message);
+          } finally {
+            btn.disabled = false;
+          }
         });
 
         list.appendChild(row);
